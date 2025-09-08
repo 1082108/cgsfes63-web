@@ -1,6 +1,6 @@
 {
-    "name": "chigusa_app63_new",
-    "short_name": "chigusa_app63_new",
+    "name": "chigusai_app",
+    "short_name": "chigusai_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
