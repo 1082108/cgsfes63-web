@@ -13,12 +13,15 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2  # v2に修正
+        uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
+          # Flutterのキャッシュを有効にし、ビルド時間を短縮
+          cache: true
+          cache-key: 'flutter-${{ hashFiles('pubspec.lock') }}'
 
       - name: Install dependencies
-        run: flutter pub get  # flutter pub getに修正
+        run: flutter pub get  # `flutter pub get` に変更
 
       - name: Build Web
         run: flutter build web --release --base-href="/cgsfes63-web/"
