@@ -7,13 +7,19 @@ on:
 
 jobs:
   deploy:
+    # ここに以下のpermissionsブロックを追加
+    permissions:
+      contents: write # リポジトリへの書き込みを許可する
+      pages: write    # GitHub Pagesへのデプロイを許可する
+      id-token: write # OpenID Connect (OIDC) トークンを生成する
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2  # この行を修正
+        uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
 
