@@ -20,7 +20,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           # アプリが必要とする最新のDart SDKバージョンをサポートするFlutterバージョンに更新
-          flutter-version: '3.22.0'
+          flutter-version: '3.35.3'
           channel: 'stable'
 
       - name: Clean Flutter build
