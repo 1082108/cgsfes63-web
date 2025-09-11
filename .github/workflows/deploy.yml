@@ -22,6 +22,9 @@ steps:
       flutter-version: '3.16.5' # 使用したいFlutterのバージョンを指定
       channel: 'stable'
 
+  - name: Clean Flutter build
+    run: flutter clean
+
   - name: Install dependencies
     run: flutter pub get
 
