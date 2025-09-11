@@ -1,43 +1,37 @@
 name: Deploy Flutter Web App
 
 on:
-  push:
-    branches:
-      - main
+push:
+branches:
+- main
 
 jobs:
-  deploy:
-    # ここに以下のpermissionsブロックを追加します
-    permissions:
-      contents: write # リポジトリへの書き込みを許可する
-      pages: write    # GitHub Pagesへのデプロイを許可する
-      id-token: write # OIDCトークンを生成する
+deploy:
+permissions:
+contents: write # リポジトリへの書き込みを許可する
+pages: write    # GitHub Pagesへのデプロイを許可する
+id-token: write # OIDCトークンを生成する
 
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+runs-on: ubuntu-latest
+steps:
+  - name: Checkout Repository
+    uses: actions/checkout@v2
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
+  - name: Set up Flutter
+    uses: subosito/flutter-action@v2
+    with:
+      flutter-version: '3.16.5' # 使用したいFlutterのバージョンを指定
+      channel: 'stable'
 
-      - name: Install dependencies
-        run: flutter pub get
+  - name: Install dependencies
+    run: flutter pub get
 
-      - name: Build Web
-        run: flutter build web --release --base-href="/cgsfes63-web/"
+  - name: Build Web
+    run: flutter build web --release --base-href="/cgsfes63-web/"
 
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: build/web
+  - name: Deploy to GitHub Pages
+    uses: JamesIves/github-pages-deploy-action@v4
+    with:
+      branch: gh-pages
+      folder: build/web
 
-- name: Install Flutter and dependencies
-  uses: subosito/flutter-action@v2
-  with:
-    flutter-version: '3.16.5' # 使用したいFlutterのバージョンを指定
-    channel: 'stable'
-- run: flutter pub get
