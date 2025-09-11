@@ -106,7 +106,7 @@ class _BunkasaiShiftScreenState extends State<BunkasaiShiftScreen> {
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [Text(_bunkasaiDay == GakusaiDay.bunkasai1 ? '9/9 文化祭1日目' : '9/10 文化祭2日目', style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold))],
+          children: [Text(_bunkasaiDay == GakusaiDay.bunkasai1 ? '9/14 文化祭1日目' : '9/15 文化祭2日目', style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold))],
         ),
       ),
     );
