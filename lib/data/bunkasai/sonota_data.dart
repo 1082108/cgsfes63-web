@@ -11,7 +11,7 @@ class EventMerchandiseDetailData {
 }
 
 class SonotaData {
-  static const String saikoshiInfo = "お得な商品が楽しめる再輝市が文化祭にて開催！\n準備から運営まで全て生徒が手掛けます。\n是非遊びに来てください！\n掘り出し物が見つかるかも！？\n再煌市と学祭グッズの販売はメインストリートへGO!!";
+  static const String saikoshiInfo = "お得な商品が楽しめる再煌市が文化祭にて開催！\n準備から運営まで全て生徒が手掛けます。\n是非遊びに来てください！\n掘り出し物が見つかるかも！？\n再煌市と学祭グッズの販売はメインストリートへGO!!";
   static const List<EventMerchandiseDetailData> eventMerchandiseList = [
     EventMerchandiseDetailData(
       title: "タオル",
@@ -41,4 +41,5 @@ class SonotaData {
   ];
   static const String chigumaInfo = "PTA主催「ちぐCafe」:サブストリート（109前）\n同窓会企画：中セミ1（中館1階）";
 }
+
 
