@@ -17,7 +17,7 @@ class BukatsuData {
     BukatsuDetailData(
       club: "[合同企画]文化部",
       place: "学校のどこか 形式:スタンプラリー 文化祭中常に公開",
-      pr: "文化部が協力して、\n部活にゆかりのある場所を巡るスタンプラリーを作りました。ぜひ校内を巡りながらスタンプを集めてみてくださいね!",
+      pr: "文化部が協力して、\n部活にゆとりのある場所を巡るスタンプラリーを作りました。ぜひ校内を巡りながらスタンプを集めてみてくださいね!",
       imgPath: "assets/images/bunkasai/bukatsu/bunka.jpg",
     ),
     BukatsuDetailData(
@@ -76,3 +76,4 @@ class BukatsuData {
   ];
 
 }
+
