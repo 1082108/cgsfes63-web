@@ -22,7 +22,7 @@ class TenjiData {
     ),
     TenjiDetailData(
       hr: "102",
-      title: "Jurassic World  ~Be dangerous~",
+      title: "Jurassic Would  ~Be dangerous~",
       pr: "ジュラシックワールドへようこそ!\nここはとても安全で恐竜が逃げ出すなんてことは...!\n#シューティング #脱走",
       imgPath: "assets/images/bunkasai/tenji/102.jpg",
     ),
@@ -124,3 +124,4 @@ class TenjiData {
     ),
   ];
 }
+
