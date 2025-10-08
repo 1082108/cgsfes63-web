@@ -23,7 +23,7 @@ import 'taiikusai/result_screen.dart';
 import 'home/theme_song/theme_song_screen.dart';
 import 'taiikusai/update_result_screen.dart';
 
-import 'quiz/quiz_data.dart'; // QuizPageのインポート
+import 'quiz/quiz_screen.dart'; // QuizPageのインポート
 
 class HomeScreen extends ConsumerWidget {
   static const routeName = "/home-screen";
