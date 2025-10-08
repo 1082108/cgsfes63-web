@@ -1,3 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+// --- TenjiDetailDataとTenjiData (ローカルデータ) ---
 class TenjiDetailData {
   final String hr;
   final String title;
@@ -125,3 +131,162 @@ class TenjiData {
   ];
 }
 
+
+// --- main関数 ---
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(); 
+  runApp(MyApp());
+}
+
+// --- MyAppクラス ---
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: '学校祭 整理券システム',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      // 最初にSplashScreenを呼び出す
+      home: const SplashScreen(), 
+    );
+  }
+}
+
+// ==================================================================
+// --- 1. SplashScreenクラス (注意事項表示画面) ---
+// ==================================================================
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  // 3秒後に自動的に遷移するタイマー
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 3), _navigateToHome);
+  }
+
+  // EventListPageへ遷移する関数
+  void _navigateToHome() {
+    // 現在のWidgetがまだマウントされていることを確認してから遷移
+    if (mounted) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const EventListPage()),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _navigateToHome, // タップでも即座に遷移
+      child: Scaffold(
+        backgroundColor: Colors.blue[50], // 背景色を明るく
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.info_outline, size: 60, color: Colors.blue),
+                const SizedBox(height: 20),
+                const Text(
+                  '【重要なお知らせ】',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 15),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                      ),
+                    ],
+                  ),
+                  child: const Text(
+                    '整理券は**配布期間内のみ**取得可能です。\n'
+                    '**呼出操作は管理者のみ**が自由に行います。\n'
+                    'アプリを閉じても整理券番号は保持されます。\n\n'
+                    '画面をタップ、または3秒後に自動で進みます。',
+                    style: TextStyle(fontSize: 16, height: 1.5),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(height: 40),
+                // 3秒後に消えるため、ローディングインジケータは省略
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+// ==================================================================
+// --- 2. EventListPageクラス (展示イベント一覧画面) ---
+// ※ 整理券アイコンのロジックは前回通り (時間制限チェック)
+// ==================================================================
+class EventListPage extends StatefulWidget {
+  const EventListPage({super.key});
+
+  @override
+  State<EventListPage> createState() => _EventListPageState();
+}
+
+class _EventListPageState extends State<EventListPage> {
+  final eventsRef = FirebaseFirestore.instance.collection('events');
+  Map<String, int?> myTickets = {}; 
+
+  @override
+  void initState() {
+    super.initState();
+    _ensureSignedInAndFetchTickets();
+  }
+
+  Future<void> _ensureSignedInAndFetchTickets() async {
+    final auth = FirebaseAuth.instance;
+    if (auth.currentUser == null) {
+      await auth.signInAnonymously();
+    }
+    _fetchMyAllTickets();
+  }
+
+  Future<void> _fetchMyAllTickets() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    Map<String, int?> fetchedTickets = {};
+    
+    for (var tenji in TenjiData.tenjiDataList) {
+      final ticketsRef = eventsRef.doc(tenji.hr).collection('tickets');
+      final querySnapshot = await ticketsRef.where('uid', isEqualTo: user.uid).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        fetchedTickets[tenji.hr] = querySnapshot.docs.first['ticketNumber'];
+      }
+    }
+    
+    if(mounted) {
+      setState(() {
+        myTickets = fetchedTickets;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext c
