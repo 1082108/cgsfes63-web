@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 //firebase
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:firebase_messaging/firebase_messaging.dart'; // この行を追加
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 //notification
 import 'screens/notification/notification_setup.dart';
@@ -59,7 +59,9 @@ import 'screens/zenkou/ff/hanabi_screen.dart';
 import 'screens/shift/shift_screen.dart';
 import 'screens/shift/taiikusai/taiikusai_shift_screen.dart';
 import 'screens/shift/bunkasai_shift_screen.dart';
-
+//quiz
+import 'data/quiz/quiz_page.dart'; 
+// main関数を一つに統合し、Firebase初期化とMyAppの実行を行う
 void main() async {
   await _init();
   runApp(const ProviderScope(child: MyApp()));
@@ -71,7 +73,7 @@ Future<void> _init() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   
-  // ここに通知権限リクエストのコードを追加
+  // 通知権限リクエストのコード
   final messaging = FirebaseMessaging.instance;
   await messaging.requestPermission(
     alert: true,
@@ -86,6 +88,9 @@ Future<void> _init() async {
   NotificationSetup.fcmSetup();
 }
 
+
+// QuizAppの定義を削除し、代わりにMyAppにクイズページへのルーティングを追加します。
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -98,6 +103,9 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       home: BottomNavigation(),
       routes: {
+        // QuizPageのルーティングを新しく追加
+        QuizPage.routeName: (ctx) => const QuizPage(), // QuizPageに static const routeName = '/quiz'; が必要
+        
         HomeScreen.routeName: (ctx) => const HomeScreen(),
         BunkasaiScreen.routeName: (ctx) => const BunkasaiScreen(),
         ZenkoukikakuScreen.routeName: (ctx) => const ZenkoukikakuScreen(),
@@ -129,7 +137,7 @@ class MyApp extends StatelessWidget {
         ResultScreen.routeName: (ctx) => const ResultScreen(),
         //zenkou/
         BihinScreen.routeName: (ctx) => const BihinScreen(),
-        SabbonScreen.routeName: (ctx) => const SabbonScreen(),
+        SabbonScreen.routeName: (ctx) => const SabbonScreen(), 
         EncoreScreen.routeName: (ctx) => const EncoreScreen(),
         UtakaiScreen.routeName: (ctx) => const UtakaiScreen(),
         FFScreen.routeName: (ctx) => const FFScreen(),
