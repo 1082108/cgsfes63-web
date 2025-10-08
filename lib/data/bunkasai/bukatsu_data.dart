@@ -1,292 +1,77 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-// --- TenjiDetailDataとTenjiData (ローカルデータ) ---
-class TenjiDetailData {
-  final String hr;
-  final String title;
+class BukatsuDetailData {
+  final String club;
+  final String place;
   final String pr;
   final String imgPath;
 
-  const TenjiDetailData({
-    required this.hr,
-    required this.title,
+  const BukatsuDetailData({
+    required this.club,
+    required this.place,
     required this.pr,
     required this.imgPath,
   });
 }
 
-class TenjiData {
-  static const List<TenjiDetailData> tenjiDataList = [
-    TenjiDetailData(
-      hr: "101",
-      title: "今日、スパイになりました。 ーPC編ー",
-      pr: "指令書\nコンピュータの世界に潜入し任務を遂行せよ。\nウイルス対策の追跡をかわし、秘匿された情報を盗み取れ!\n数々のミッションを突破しながら情報の欠片を集めて脱出せよ。\nまるでゲームのような体験を通じて、\n情報社会に潜む危険と正しい判断力を楽しみながら学ぶことができる体験型アトラクション。",
-      imgPath: "assets/images/bunkasai/tenji/101.jpg",
+class BukatsuData {
+  static const List<BukatsuDetailData> bukatsuDataList = [
+    BukatsuDetailData(
+      club: "[合同企画]文化部",
+      place: "学校のどこか 形式:スタンプラリー 文化祭中常に公開",
+      pr: "文化部が協力して、\n部活にゆかりのある場所を巡るスタンプラリーを作りました。ぜひ校内を巡りながらスタンプを集めてみてくださいね!",
+      imgPath: "assets/images/bunkasai/bukatsu/bunka.jpg",
     ),
-    TenjiDetailData(
-      hr: "102",
-      title: "Jurassic Would  ~Be dangerous~",
-      pr: "ジュラシックワールドへようこそ!\nここはとても安全で恐竜が逃げ出すなんてことは...!\n#シューティング #脱走",
-      imgPath: "assets/images/bunkasai/tenji/102.jpg",
+    BukatsuDetailData(
+      club: "華道部",
+      place: "美術室 形式:展示 文化祭中常に公開",
+      pr: "お花を展示します🎶ぜひ来てください!",
+      imgPath: "assets/images/bunkasai/bukatsu/Kadou.jpg",
     ),
-    TenjiDetailData(
-      hr: "103",
-      title: "和風賭け事 「～ちぐさの花街へおいでやす～」",
-      pr: "103のクラス展示、「和風賭け事」であるぞ!\n数多の遊戯をやりこなし、遊盛亜（展示内通貨）を集めるのだ",
-      imgPath: "assets/images/bunkasai/tenji/103.png",
+    BukatsuDetailData(
+      club: "写真部",
+      place: "工作室 形式:展示 文化祭中常に公開",
+      pr: "たくさんのご来場をお待ちしております!",
+      imgPath: "assets/images/bunkasai/bukatsu/Shashin.jpg",
     ),
-    TenjiDetailData(
-      hr: "104",
-      title: "ちぐベガス",
-      pr: "ようこそ 非日常の世界へ-\nここはCHIGUVEGASきらびやかなホストたちがあなたを迎え、運命を賭けるカジノテーブルが広がる。\n勝つも負けるもあなた次第。\n「勝負に必要だったのは運じゃない。\nこの俺といっしょにいることだ。」\nさぁ、文化祭で一番甘く危険な時間を。",
-      imgPath: "assets/images/bunkasai/tenji/104.jpg",
+    BukatsuDetailData(
+      club: "水泳部",
+      place: "生物室  形式:紹介動画 文化祭中常に公開",
+      pr: "休憩所で練習風景の動画流してます!!ぜひ来てくださいがてら""\n休憩がてら見に来てください!!",
+      imgPath: "assets/images/bunkasai/bukatsu/Suiei.jpg",
     ),
-    TenjiDetailData(
-      hr: "105",
-      title: "そこにAIはあるんか",
-      pr: "目の前に広がる、未来の世界。\nしかしそこには病人が……\n救えるのはあなたしかいません。\nどうしたらいいか不安？\n大丈夫。\nあなたには最新のAIがついています。\nどうかあなたのアイを大切に。",
-      imgPath: "assets/images/bunkasai/tenji/105.jpg",
+    BukatsuDetailData(
+      club: "演劇部",
+      place: "体育館 形式:上演 15日14:45~15:45",
+      pr: "夏の大会と同じく「ペトリコール」を上演します。\n文学作品や人間関係を通し、「再生」を描いた物語です。3年演劇の後は是非ちぐげきをご覧下さい。",
+      imgPath: "assets/images/bunkasai/bukatsu/engeki.jpg",
     ),
-    TenjiDetailData(
-      hr: "106",
-      title: "111.1回の脈拍",
-      pr: "「あなたには今から赤血球として体内を探索し、酸素を届けてもらいます。しかし、今の体内は...」",
-      imgPath: "assets/images/bunkasai/tenji/106.jpg",
+    BukatsuDetailData(
+      club: "クイズ研究同好会",
+      place: "東館1セミ 形式:クイズ体験 9/14(日) 12:00〜14:00  9/15(月) 13:00〜16:00",
+      pr: "出入り自由です！初心者も大歓迎！お待ちしております！",
+      imgPath: "assets/images/bunkasai/bukatsu/Kuizu.jpg",
+    ),BukatsuDetailData(
+      club: "美術部",
+      place: "美術室 形式:アート体験 14日 15日 11~16時",
+      pr: "一筆いれるだけ!\n皆で作品を作ってみませんか?\n休憩室としても利用できます!",
+      imgPath: "assets/images/bunkasai/bukatsu/bizyutsu.jpg",
     ),
-    TenjiDetailData(
-      hr: "107",
-      title: "今日好きになりましょう",
-      pr: "恋人募集中...。あなたの選択1つで恋が動く!?\n恋がしたい人のための、リアル恋愛シミュレーションゲーム!\n千種高校で忘れられない青春のひとときを一緒に過ごしませんか?",
-      imgPath: "assets/images/bunkasai/tenji/107.jpg",
+    BukatsuDetailData(
+      club: "ダンス部",
+      place: "バレーコート 形式:パフォーマンス 15日11:30~",
+      pr: "RaGGACraZe 21st, 22ndです!!\n9月15日11時30分~、バレーコートにて、21stは学年曲メドレー、22ndは学年曲を披露させていただきます!\nたくさんの手拍子や声援で応援していただけると嬉しいです!!",
+      imgPath: "assets/images/bunkasai/bukatsu/Dansu.jpg",
     ),
-    TenjiDetailData(
-      hr: "108",
-      title: "ホスト・キャバクラ 第三の誕生",
-      pr: "こんばんは。\n108がおおくりするホスト・キャバクラ「第3の誕生」は好評営業中です。\n生まれ変わるような体験を、あなたに-\nご来店、心よりお待ちしています。",
-      imgPath: "assets/images/bunkasai/tenji/108.jpg",
+    BukatsuDetailData(
+      club: "アカペラ部",
+      place: "サブストリート東 形式:ミニライブ 15日10:30~",
+      pr: "皆さんが知っているあの曲を、アカペラでカバーします!ぜひ聴きに来てください♪",
+      imgPath: "assets/images/bunkasai/bukatsu/akapera.jpg",
     ),
-    TenjiDetailData(
-      hr: "109",
-      title: "世界の祭り知らないようじゃ無理か。109はね、行っておかないと。",
-      pr: "探す・転がす・投げる・撮る、\n109の展示に来れば全部できる!\n世界の祭りがぎゅっと詰まった教室で笑って驚いて最高の思い出を作ろう!\nまだ109行ってないようじゃだめか。\nまだ行ってない人は今すぐ北館1階109へGO!",
-      imgPath: "assets/images/bunkasai/tenji/109.jpg",
-    ),
-    TenjiDetailData(
-      hr: "201",
-      title: "密着 公安警察24時",
-      pr: "私たち201は公安警察を題材にした展示をします。\n公安警察になりきり危険なテロから日本を守り抜く体験型の展示になっています。\nハラハラドキドキするミッションや仕掛けを用意しています。\nぜひ中館の2階201公安警察24時でこの夏1番の思い出を一緒に作りましょう。",
-      imgPath: "assets/images/bunkasai/tenji/201.jpg",
-    ),
-    TenjiDetailData(
-      hr: "202",
-      title: "緊Qロケ! イッテきて!",
-      pr: "世界をめぐる探検、202で開幕!?\n新たなロケメンバー緊Q募集中!!\n誰もが知るあの大都会から、賑やかなお祭り、そして未来の珍イベントが君を待つ!何が起こるかはお楽しみ。\nカレンダーピースを集めて、君もイッテQの一員としてこの冒険に飛び込もう!!!",
-      imgPath: "assets/images/bunkasai/tenji/202.jpg",
-    ),
-    TenjiDetailData(
-      hr: "203",
-      title: "廃病院占拠",
-      pr: "ある日差出人不明の招待状が届いた。あなたはその招待状の場所へ足を運ぶ。\nそこは70年前に閉院した病院だった。なんでもある事件が起きたんだとか。\n廃病院であなたが目にしたものは...\n少しの違和感も見逃すな!",
-      imgPath: "assets/images/bunkasai/tenji/203.png",
-    ),
-    TenjiDetailData(
-      hr: "204",
-      title: "ERROR:Human",
-      pr: "X年前のとある病院。一人の命が奪われた。\n誰がその悲劇を起こしたのか。その責任はどこにあるのか。\n当事者になったとき、あなたはこの悲劇についてどう思うだろう。",
-      imgPath: "assets/images/bunkasai/tenji/204.jpg",
-    ),
-    TenjiDetailData(
-      hr: "205",
-      title: "ちぐ太郎電鉄 ～歴史を超えて富豪になれ!～",
-      pr: "この度はちぐ太郎電鉄にご乗車いただきありがとうございます。\n次は 千種 \n205展示へお越しの方はここでお降りください。\n205では歴史をテーマにした\nすごろくゲームを楽しむことができます!\n展示会場へお乗り換えのお客様は、中館1階の205教室へお越しください",
-      imgPath: "assets/images/bunkasai/tenji/205.jpg",
-    ),
-    TenjiDetailData(
-      hr: "206",
-      title: "物理は嫌だが役に立つ",
-      pr: "206の展示では、物理をテーマとしたミニゲームを行います。\n私たちがこれまでに学習したことをより楽しくより分かりやすいミニゲームで体験できます。\nまた、内装もラボ風に再現することで、より世界観を味わいながら展示を楽しめます。\n4つ行うミニゲームの内の1つを紹介します。ブロワーという装置を使って、上げられたボールをキャッチするというゲームです。\nこのミニゲームではボールにはたらく流体学と斜方投射を身近に体験することができます。\nそして各ミニゲームについての説明を設けることでより簡単に理解を深めることができます。\nそのようにして本校に訪れる多くの老若男女に物理のおもしろさや楽しさに触れ合っていただけたらいいなと思います!!",
-      imgPath: "assets/images/bunkasai/tenji/206.jpg",
-    ),
-    TenjiDetailData(
-      hr: "207",
-      title: "モンスターズ・イン・クライム",
-      pr: "犯罪は意外なところに潜んでいた!\n驚きと発見の超絶トロッコ型アトラクション、モンスターズ・イン・クライム‼\nこのアトラクション内には、日本では扱われないけれど国によっては犯罪になってしまう、というものを表した展示がたくさん用意されています。\nゲストの方は暗闇の中でそれらを見つけ出してもらいます!\nあなたはいくつ見つけられるかな!?\n衝撃のラストに、あなたは驚愕する...。\nあまりネタバレできないので、紹介はここまでとします。\n広げよう、新しい世界を。",
-      imgPath: "assets/images/bunkasai/tenji/207.png",
-    ),
-    TenjiDetailData(
-      hr: "208",
-      title: "イッツ ア スモール悪ド",
-      pr: "「イッツ ア スモール悪ド」の世界へようこそ!\nあなたのミッションは、世界中を旅して、頼まれた荷物を届けること。\nヨーロッパからアジア、アフリカ、中南米、砂漠地帯までー\nドキドキ&ワクワクいっぱいの\n『ちょっとクセになる世界旅行』、\nあなたも体験してみませんか?",
-      imgPath: "assets/images/bunkasai/tenji/208.jpg",
-    ),
-    TenjiDetailData(
-      hr: "209",
-      title: "あきす～ ドアを開けなさ～い",
-      pr: "もし空き巣に入られたら...\nそれに備えて空き巣犯になって犯人がとる行動を体験しよう!\nハラハラ・ドキドキの中盗み取れ!",
-      imgPath: "assets/images/bunkasai/tenji/209.jpg",
+    BukatsuDetailData(
+      club: "文芸部",
+      place: "クイズ研究部部室横(生徒会室横) 形式:展示 文化祭中常に公開",
+      pr: "今年も部誌配布を行います!\nさらに、「伊勢物語」から引用した和歌を乗せた\n「伊勢みくじ」も行います!\n軽い気持ちでぜひ引いてみてくださいね♪",
+      imgPath: "assets/images/bunkasai/bukatsu/bungebu.jpg",
     ),
   ];
 }
-
-
-// --- main関数 ---
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); 
-  runApp(MyApp());
-}
-
-// --- MyAppクラス ---
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '学校祭 整理券システム',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      // 最初にSplashScreenを呼び出す
-      home: const SplashScreen(), 
-    );
-  }
-}
-
-// ==================================================================
-// --- 1. SplashScreenクラス (注意事項表示画面) ---
-// ==================================================================
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  // 3秒後に自動的に遷移するタイマー
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(const Duration(seconds: 3), _navigateToHome);
-  }
-
-  // EventListPageへ遷移する関数
-  void _navigateToHome() {
-    // 現在のWidgetがまだマウントされていることを確認してから遷移
-    if (mounted) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const EventListPage()),
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _navigateToHome, // タップでも即座に遷移
-      child: Scaffold(
-        backgroundColor: Colors.blue[50], // 背景色を明るく
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(32.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.info_outline, size: 60, color: Colors.blue),
-                const SizedBox(height: 20),
-                const Text(
-                  '【重要なお知らせ】',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 15),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                      ),
-                    ],
-                  ),
-                  child: const Text(
-                    '整理券は**配布期間内のみ**取得可能です。\n'
-                    '**呼出操作は管理者のみ**が自由に行います。\n'
-                    'アプリを閉じても整理券番号は保持されます。\n\n'
-                    '画面をタップ、または3秒後に自動で進みます。',
-                    style: TextStyle(fontSize: 16, height: 1.5),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                const SizedBox(height: 40),
-                // 3秒後に消えるため、ローディングインジケータは省略
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-
-// ==================================================================
-// --- 2. EventListPageクラス (展示イベント一覧画面) ---
-// ※ 整理券アイコンのロジックは前回通り (時間制限チェック)
-// ==================================================================
-class EventListPage extends StatefulWidget {
-  const EventListPage({super.key});
-
-  @override
-  State<EventListPage> createState() => _EventListPageState();
-}
-
-class _EventListPageState extends State<EventListPage> {
-  final eventsRef = FirebaseFirestore.instance.collection('events');
-  Map<String, int?> myTickets = {}; 
-
-  @override
-  void initState() {
-    super.initState();
-    _ensureSignedInAndFetchTickets();
-  }
-
-  Future<void> _ensureSignedInAndFetchTickets() async {
-    final auth = FirebaseAuth.instance;
-    if (auth.currentUser == null) {
-      await auth.signInAnonymously();
-    }
-    _fetchMyAllTickets();
-  }
-
-  Future<void> _fetchMyAllTickets() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return;
-
-    Map<String, int?> fetchedTickets = {};
-    
-    for (var tenji in TenjiData.tenjiDataList) {
-      final ticketsRef = eventsRef.doc(tenji.hr).collection('tickets');
-      final querySnapshot = await ticketsRef.where('uid', isEqualTo: user.uid).get();
-      if (querySnapshot.docs.isNotEmpty) {
-        fetchedTickets[tenji.hr] = querySnapshot.docs.first['ticketNumber'];
-      }
-    }
-    
-    if(mounted) {
-      setState(() {
-        myTickets = fetchedTickets;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext c
