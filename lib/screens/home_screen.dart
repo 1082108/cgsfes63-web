@@ -23,6 +23,8 @@ import 'taiikusai/result_screen.dart';
 import 'home/theme_song/theme_song_screen.dart';
 import 'taiikusai/update_result_screen.dart';
 
+import 'quiz/quiz_screen.dart'; // QuizPageのインポート
+
 class HomeScreen extends ConsumerWidget {
   static const routeName = "/home-screen";
   const HomeScreen({super.key});
@@ -58,6 +60,7 @@ class HomeScreen extends ConsumerWidget {
           width: 250,
           height: 50,
           decoration: BoxDecoration(
+            // 既存のボタンと同じグラデーションを使用
             gradient: LinearGradient(colors: [const Color.fromARGB(255, 248, 103, 7), const Color.fromARGB(255, 255, 2, 2)]),
             borderRadius: BorderRadius.circular(5),
           ),
@@ -129,6 +132,16 @@ class HomeScreen extends ConsumerWidget {
                   const SizedBox(width: 10),
                   _functionButton(text: "テーマソング", icon: Icons.music_note, onPressed: () => Navigator.of(context).pushNamed(ThemeSongScreen.routeName)),
                   _functionButton(text: "体育祭結果", icon: Icons.scoreboard, onPressed: () => Navigator.of(context).pushNamed(ResultScreen.routeName)),
+                  
+                  // ★★★ ここにクイズボタンを追加しました ★★★
+                  _functionButton(
+                    text: "暇つぶしクイズ", 
+                    icon: Icons.lightbulb_outline, // クイズに合うアイコンを選択
+                    onPressed: () => Navigator.of(context).pushNamed(QuizPage.routeName)
+                  ),
+                  const SizedBox(height: 10), // スペースを調整
+                  // ★★★ ------------------------- ★★★
+                  
                   if (ref.watch(currentLoginStatusProvider) == CurrentLoginStatus.loggedInAdmin)
                     _functionButton(text: "体育祭結果更新", icon: Icons.sports, onPressed: () => Navigator.of(context).pushNamed(UpdateResultScreen.routeName)),
                   if (ref.watch(currentLoginStatusProvider) == CurrentLoginStatus.loggedInAdmin)
