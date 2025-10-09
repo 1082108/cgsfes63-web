@@ -61,7 +61,14 @@ import 'screens/shift/taiikusai/taiikusai_shift_screen.dart';
 import 'screens/shift/bunkasai_shift_screen.dart';
 //quiz
 import 'data/quiz/quiz_page.dart'; 
-// main関数を一つに統合し、Firebase初期化とMyAppの実行を行う
+
+// ★★★ Hyoji 関連のインポートとProviderのインポート ★★★
+// HyojiScreen のインポート (パスは screens/hyoji/hyoji_screen.dart と仮定)
+import 'screens/hyoji/hyoji_screen.dart'; 
+// Provider のインポート (パスは providers/initialization_provider.dart と仮定)
+import 'screens/hyoji/initialization_provider.dart'; 
+// ★★★ ----------------------------------------- ★★★
+
 void main() async {
   await _init();
   runApp(const ProviderScope(child: MyApp()));
@@ -91,20 +98,47 @@ Future<void> _init() async {
 
 // QuizAppの定義を削除し、代わりにMyAppにクイズページへのルーティングを追加します。
 
-class MyApp extends StatelessWidget {
+// ★★★ MyApp extends ConsumerWidget のみを残し、修正します ★★★
+class MyApp extends ConsumerWidget { 
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) { 
+    
+    // 注意事項の同意状態を非同期で監視
+    final termsAsyncValue = ref.watch(hasAgreedToTermsProvider);
+    
     return MaterialApp(
       title: 'Chigusai App',
       debugShowCheckedModeBanner: false,
       theme: appTheme(),
       themeMode: ThemeMode.system,
-      home: BottomNavigation(),
+      
+      // homeウィジェットをFutureProviderの状態に応じて分岐させる
+      home: termsAsyncValue.when(
+        data: (hasAgreed) {
+          if (hasAgreed) {
+            // 同意済みならBottomNavigation（メインコンテンツ）を表示
+            return BottomNavigation();
+          } else {
+            // 未同意なら注意事項画面（HyojiScreen）を表示
+            return const HyojiScreen(); 
+          }
+        },
+        loading: () => const Scaffold( // データロード中はローディング画面
+          body: Center(child: CircularProgressIndicator()),
+        ),
+        error: (err, stack) => Scaffold( // エラーが発生した場合はエラー表示
+          body: Center(child: Text('初期設定エラーが発生しました。$err')),
+        ),
+      ),
+
       routes: {
-        // QuizPageのルーティングを新しく追加
-        QuizPage.routeName: (ctx) => const QuizPage(), // QuizPageに static const routeName = '/quiz'; が必要
+        // QuizPageのルーティング
+        QuizPage.routeName: (ctx) => const QuizPage(), 
+        
+        // HyojiScreenのルーティングを追加
+        HyojiScreen.routeName: (ctx) => const HyojiScreen(),
         
         HomeScreen.routeName: (ctx) => const HomeScreen(),
         BunkasaiScreen.routeName: (ctx) => const BunkasaiScreen(),
