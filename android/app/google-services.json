@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "145834077795",
+    "project_id": "chigusai63",
+    "storage_bucket": "chigusai63.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145834077795:android:ddbb8457a2c9df00b69256",
+        "android_client_info": {
+          "package_name": "com.example.chigusa_app63_new"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-NSVrNkoEz4FZLZgSdEd7HQKRP91iyyc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
