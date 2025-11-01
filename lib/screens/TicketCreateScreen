@@ -1,0 +1,125 @@
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class TicketCreateScreen extends StatefulWidget {
+  final String tenjiId;
+  final String tenjiName;
+
+  const TicketCreateScreen({
+    super.key,
+    required this.tenjiId,
+    required this.tenjiName,
+  });
+
+  @override
+  State<TicketCreateScreen> createState() => _TicketCreateScreenState();
+}
+
+class _TicketCreateScreenState extends State<TicketCreateScreen> {
+  bool _isLoading = false;
+
+  Future<void> _createTicket(BuildContext context) async {
+    setState(() => _isLoading = true);
+    final firestore = FirebaseFirestore.instance;
+
+    // 💡 重要な確認ポイント: counterRef のドキュメントIDは展示IDそのもの
+    // 例: widget.tenjiId が 'tenji1' なら、 'counters/tenji1' を参照
+    final counterRef = firestore.collection('counters').doc(widget.tenjiId);
+    final ticketRef = firestore.collection('tickets').doc();
+
+    try {
+      int nextNumber = 0;
+      
+      // トランザクション: カウンターの安全な取得と更新
+      await firestore.runTransaction((transaction) async {
+        final counterSnap = await transaction.get(counterRef);
+
+        // 1. 現在の連番を取得し、次の番号を計算
+        int currentNumber = counterSnap.exists ? (counterSnap['currentNumber'] ?? 0) : 0;
+        nextNumber = currentNumber + 1;
+        
+        // 2. カウンタードキュメントを更新/作成
+        transaction.set(counterRef, {
+          'currentNumber': nextNumber,
+          'tenjiName': widget.tenjiName, 
+        });
+
+        // 3. 新しい整理券ドキュメントを作成
+        transaction.set(ticketRef, {
+          'tenjiId': widget.tenjiId,
+          'tenjiName': widget.tenjiName,
+          'timestamp': FieldValue.serverTimestamp(),
+          'status': 'valid',
+          'ticketId': ticketRef.id,
+          'ticketNumber': nextNumber, // 整理券番号として連番を保存
+        });
+      });
+      
+      // トランザクション成功後、取得した連番を表示
+      final String newTicketNumber = nextNumber.toString();
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${widget.tenjiName} の整理券を発行しました。整理券番号: $newTicketNumber'),
+            duration: const Duration(seconds: 5),
+          ),
+        );
+      }
+      
+      if (mounted) {
+        Navigator.pop(context);
+      }
+
+    } catch (e) {
+      print('ERROR: 整理券発行失敗: $e'); 
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('エラー: 整理券発行に失敗しました ($e)')),
+        );
+      }
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('${widget.tenjiName} 整理券'), backgroundColor: Colors.indigo),
+      body: Center(
+        child: _isLoading
+            ? const CircularProgressIndicator()
+            : Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.confirmation_number_outlined, color: Colors.indigo, size: 80),
+                    const SizedBox(height: 24),
+                    Text(widget.tenjiName, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 16),
+                    const Text(
+                      '整理券を発行しますか？\n（展示ごとに独立した通し番号が割り振られます）',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    const SizedBox(height: 32),
+                    ElevatedButton.icon(
+                      onPressed: () => _createTicket(context),
+                      icon: const Icon(Icons.add),
+                      label: const Text('整理券を発行する'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.indigo,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+      ),
+    );
+  }
+}
