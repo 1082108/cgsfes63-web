@@ -134,7 +134,7 @@ class HomeScreen extends ConsumerWidget {
                   _functionButton(text: "テーマソング", icon: Icons.music_note, onPressed: () => Navigator.of(context).pushNamed(ThemeSongScreen.routeName)),
                   _functionButton(text: "体育祭結果", icon: Icons.scoreboard, onPressed: () => Navigator.of(context).pushNamed(ResultScreen.routeName)),
                   _functionButton(
-                    text: "暇つぶしクイズ", 
+                    text: "cgs\nクイズ", 
                     icon: Icons.lightbulb_outline, // クイズに合うアイコンを選択
                     onPressed: () => Navigator.of(context).pushNamed(QuizPage.routeName)
                   ),
